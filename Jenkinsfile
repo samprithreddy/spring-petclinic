@@ -1,7 +1,7 @@
 pipeline {
     agent {label 'jdk_8'}
     tools {
-        jdk 'java 8'
+        jdk 'jdk_17'
     }
     stages {
         stage('vcs') {
@@ -13,7 +13,8 @@ pipeline {
         } 
         stage('package') {
             steps {
-                 sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sampreeth_rahul '
+                 sh 'mvn package',
+                 sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sampreeth_rahul -Dsonar.organisationKey=sampreeth'
             }
         }
     }
