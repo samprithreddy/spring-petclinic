@@ -13,7 +13,6 @@ pipeline {
         } 
         stage('package') {
             steps {
-                 sh 'mvn package',
                  sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sampreeth_rahul -Dsonar.organisationKey=sampreeth'
             }
         }
