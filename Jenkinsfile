@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'jdk_8'}
+    agent { label 'jdk_8' }
     parameters {
         choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'], description: 'Maven Goal')
     }
@@ -7,14 +7,18 @@ pipeline {
         stage('vcs') {
             steps {
                 git url: 'https://github.com/samprithreddy/spring-petclinic.git',
-                     branch: 'declarative'     
+                    branch: 'declarative'
             }
-        } 
+        }
         stage('package') {
             tools {
                 jdk 'JDK_17'
             }
-            sh "mvn ${params.MAVEN_GOAL}"
+            steps {
+                sh 'mvn package'
+                sh "mvn ${params.MAVEN_GOAL}"
+            }
+        }
         stage('sonar analysis') {
             steps {
                 // performing sonarqube analysis with "withSonarQubeENV(<Name of Server configured in Jenkins>)"
@@ -23,6 +27,12 @@ pipeline {
                 }
             }
         }
+        stage('post build') {
+            steps {
+                archiveArtifacts artifacts: '**/target/spring-petclinic-3.0.0-SNAPSHOT.jar',
+                                 onlyIfSuccessful: true
+                junit testResults: '**/surefire-reports/TEST-*.xml'
+            }
         }
     }
 }
