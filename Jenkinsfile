@@ -1,8 +1,5 @@
 pipeline {
     agent {label 'jdk_8'}
-    tools {
-        jdk 'jdk_17'
-    }
     parameters {
         choice(name: 'MAVEN_GOAL', choices: ['package', 'install', 'clean'], description: 'Maven Goal')
     }
@@ -14,9 +11,10 @@ pipeline {
             }
         } 
         stage('package') {
-            steps {
-                sh "mvn ${params.MAVEN_GOAL}"
+            tools {
+                jdk 'JDK_17'
             }
+            sh "mvn ${params.MAVEN_GOAL}"
         stage('sonar analysis') {
             steps {
                 // performing sonarqube analysis with "withSonarQubeENV(<Name of Server configured in Jenkins>)"
