@@ -13,10 +13,12 @@ pipeline {
                 sh 'mvn package'
             }
         }
-        stage('SonarQube analysis') {
+        stage('sonar analysis') {
             steps {
-                withSonarQubeEnv('SONAR_CLOUD_SERVER') 
-                sh ' mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cicd-jenkins_rahul-cicd  -Dsonar.organization=cicd-jenkins'
+                // performing sonarqube analysis with "withSonarQubeENV(<Name of Server configured in Jenkins>)"
+                withSonarQubeEnv('SONAR_CLOUD_SERVER') {
+                    sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cicd-jenkins_rahul-cicd -Dsonar.organization=cicd-jenkins'
+                }
             }
         }    
         stage('post build') {
