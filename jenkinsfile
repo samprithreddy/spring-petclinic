@@ -12,6 +12,12 @@ pipeline {
                 sh 'export PATH=/usr/lib/jvm/java-17-openjdk-amd64/bin:$PATH'
                 sh 'mvn package'
             }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SONAR_CLOUD_SERVER') 
+                sh 'mvn clean package sonar:sonar mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cicd-jenkins_rahul-cicd  -Dsonar.organization=cicd-jenkins'
+            }
         }    
         stage('post build') {
             steps {
