@@ -16,7 +16,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SONAR_CLOUD_SERVER') 
-                sh 'mvn clean package sonar:sonar mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cicd-jenkins_rahul-cicd  -Dsonar.organization=cicd-jenkins'
+                sh ' mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cicd-jenkins_rahul-cicd  -Dsonar.organization=cicd-jenkins'
             }
         }    
         stage('post build') {
